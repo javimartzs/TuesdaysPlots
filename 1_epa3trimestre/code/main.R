@@ -49,8 +49,9 @@ indef <- data |>
     pivot_wider(names_from = ducon2, values_from = total)
 
 write.csv(indef, 'output/composicion_indef.csv', row.names = F)
+#' ----------------------------------------------------------------------------
 
-#' Tasa de paro y Tasa de temporalidad ----------------------------------------
+#' 3) Tasa de paro y Tasa de temporalidad -------------------------------------
 temp <- data |> 
     filter(aoi %in% c(3:4)) |> 
     filter(situ %in% c(7:8)) |> 
@@ -68,12 +69,25 @@ paro <- data |>
 
 temp_paro <- merge(temp, paro)
 
-openxlsx::write.xlsx(temp_paro, 'output/temp_paro.xlsx')
+write.csv(temp_paro, 'output/temp_paro.csv', row.names = F)
 #' ----------------------------------------------------------------------------
 
 
-#' Evolución de la temporalidad pública y privada -----------------------------
-#' Composición de los contratos indefinidos -----------------------------------
+#' 4) Evolución de la temporalidad pública y privada --------------------------
+
+temp <- data |>     
+    filter(aoi %in% c(3:4)) |> 
+    filter(situ %in% c(7:8)) |> 
+    group_by(fecha, situ, ducon1) |> 
+    summarise(total = sum(factorel)) |> 
+    mutate(pct = total / sum(total)) |> 
+    mutate(situ = ifelse(situ == 7, 'Sector Publico', 'Sector Privado')) |> 
+    filter(ducon1 == 6) |> 
+    select(fecha, situ, pct) |> 
+    pivot_wider(names_from = situ, values_from = pct)
+
+write.csv(temp, 'output/Temporalidad_sector.csv', row.names = F)
+
 
 
 
