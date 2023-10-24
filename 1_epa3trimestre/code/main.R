@@ -1,5 +1,6 @@
 library(esadeecpol)
 
+#download_epa(4, 4, 2023, 2023)
 
 #' Importamos los microdatos de la EPA --------------------------------------
 dir <- getwd()
@@ -80,13 +81,14 @@ temp <- data |>
     filter(situ %in% c(7:8)) |> 
     group_by(fecha, situ, ducon1) |> 
     summarise(total = sum(factorel)) |> 
-    mutate(pct = total / sum(total)) |> 
+    mutate(pct = total / sum(total)*100) |> 
     mutate(situ = ifelse(situ == 7, 'Sector Publico', 'Sector Privado')) |> 
     filter(ducon1 == 6) |> 
     select(fecha, situ, pct) |> 
     pivot_wider(names_from = situ, values_from = pct)
 
 write.csv(temp, 'output/Temporalidad_sector.csv', row.names = F)
+#' ----------------------------------------------------------------------------
 
 
 
