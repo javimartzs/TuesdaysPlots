@@ -89,7 +89,3 @@ temp <- data |>
 
 write.csv(temp, 'output/Temporalidad_sector.csv', row.names = F)
 #' ----------------------------------------------------------------------------
-
-
-
-
