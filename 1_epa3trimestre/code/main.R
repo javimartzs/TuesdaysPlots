@@ -1,6 +1,6 @@
 library(esadeecpol)
 
-#download_epa(4, 4, 2023, 2023)
+download_epa(4, 4, 2023, 2023)
 
 #' Importamos los microdatos de la EPA --------------------------------------
 dir <- getwd()
@@ -75,7 +75,6 @@ write.csv(temp_paro, 'output/temp_paro.csv', row.names = F)
 
 
 #' 4) Evolución de la temporalidad pública y privada --------------------------
-
 temp <- data |>     
     filter(aoi %in% c(3:4)) |> 
     filter(situ %in% c(7:8)) |> 
@@ -89,3 +88,22 @@ temp <- data |>
 
 write.csv(temp, 'output/Temporalidad_sector.csv', row.names = F)
 #' ----------------------------------------------------------------------------
+
+
+horas <- data |> 
+    filter(aoi %in% c(3:4)) |> 
+    filter(situ %in% c(7:8)) |> 
+    #filter(parco1 == 1) |> 
+    filter(fecha == '2023T2') |> 
+    filter(horash != 9999) |> 
+    mutate(horas = case_when(
+        horash < 3730 ~ 'Menos de 37.5',
+        horash == 3730 ~ '37.5 horas',
+        horash > 3730 ~ 'Mas de 37.5')) |> 
+    group_by(horas) |> 
+    summarise(total = sum(factorel)) |> 
+    mutate(pct = total / sum(total))
+
+view(horas)
+
+
