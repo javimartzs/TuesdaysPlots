@@ -1,7 +1,5 @@
 library(esadeecpol)
 
-download_epa(4, 4, 2023, 2023)
-
 #' Importamos los microdatos de la EPA --------------------------------------
 dir <- getwd()
 setwd('1_epa3trimestre/input')
@@ -105,5 +103,6 @@ horas <- data |>
     mutate(pct = total / sum(total))
 
 view(horas)
+
 
 
